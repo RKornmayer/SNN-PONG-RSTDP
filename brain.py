@@ -291,48 +291,6 @@ class Brain_rstdp:
                 S_ie.alpha_istdp = 0.05
                 self.synapse_groups.append(S_ie)
 
-            """Recurrent synapses in every layer
-            # ---Excitatory FEEDFORWARD & RECURRENT(within same layer) (Exc -> Exc)---
-            for id_tgt, tgt_exc in enumerate(self.exc_groups):
-                distance = id_tgt - id_src
-                
-                is_recurrent = (distance == 0) 
-                is_feedforward = (distance == 1)
-
-                if is_recurrent or is_feedforward:
-                    syn = Synapses(src_exc, tgt_exc,
-                                model=self.eqs_rstdp,
-                                namespace=syn_rstdp_namespace,
-                                on_pre='''
-                                g_exc_post += w          
-                                apre += A_plus            
-                                c = clip(c + apost, -c_max, c_max)
-                                ''',
-                                on_post='''
-                                apost += A_minus
-                                c = clip(c + apre, -c_max, c_max)
-                                ''',
-                                name=f'Syn_{id_src}_to_{id_tgt}')
-                    
-                    if is_recurrent:
-                        # Gaussian distributian
-                        syn.connect(condition='i != j', p='0.8 * exp(-((i-j)**2) / (2 * 4.0**2))')
-                    else:
-                        # all to all connection
-                        syn.connect(p=1)
-                    
-                    syn.w = '4.0*nS + rand() * 4.0*nS'
-                    syn.c = 0 
-                    syn.tau_c = 40 * ms 
-                    
-                    syn.dopa_idx = 0
-                    syn.d_syn = linked_var(self.dopamine_group, 'D', index='dopa_idx')
-                    syn.delay = '1*ms + rand()*2*ms'
-                    
-                    self.synapse_groups.append(syn)
-            """
-            
-            
             # --- Excitatory feedforward & recurrent connections (Exc -> Exc) ---
             # Active configuration: recurrence is restricted (see disabled block above for the fully-recurrent variant)
             for id_tgt, tgt_exc in enumerate(self.exc_groups):

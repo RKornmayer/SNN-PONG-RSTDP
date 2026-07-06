@@ -25,7 +25,7 @@ It's as much a neuroscience-inspired learning experiment as it is a Pong bot.
 - **Sensory layer** (100 excitatory neurons): ball's y-position encoded as a Gaussian bump of Poisson firing rates.
 - **Motor layer** (100 excitatory + 25 inhibitory neurons): drives paddle movement. Read out via a windowed, chunk-histogram winner-take-all with hysteresis (the paddle only switches target chunk if the new one has ≥1.25× the spike count of the current one, damping jitter).
 - **R-STDP**: an eligibility trace `c` (built from local STDP) is multiplied by a dopamine signal `D` (driven by reward) to update weights every 10ms — implemented as an explicit `network_operation`, not Brian2's native on_pre/on_post weight updates.
-- **iSTDP**: local inhibitory plasticity per area, keeping excitation/inhibition balanced — separate homeostatic mechanism from the reward-driven learning.
+- **iSTDP**: local inhibitory plasticity in the output layer, keeping excitation/inhibition balanced — separate homeostatic mechanism from the reward-driven learning.
 - **Adaptive thresholds**: per-neuron spiking threshold creeps up with activity and decays back to baseline — a second homeostatic mechanism.
 - **Episodic normalization**: after every missed ball, incoming synaptic weight sums per neuron are pulled softly back toward a target value.
 - **Curriculum learning**: the game's y-axis is split into bins (`num_chunks`) that get progressively finer as the agent clears a 75% hit-rate threshold per chunk — motor precision is demanded incrementally, not from the start.
@@ -46,7 +46,7 @@ It's as much a neuroscience-inspired learning experiment as it is a Pong bot.
 ### Requirements
 
 - Python 3.10+
-- Dependencies: `brian2`, `numpy`, `pygame`, `h5py`, `matplotlib`
+- Dependencies: `brian2`, `numpy`, `pygame-ce`, `h5py`, `matplotlib`
 
 ```bash
 pip install -r requirements.txt
@@ -67,13 +67,11 @@ python main.py
 This project is under active, informal development. Known rough edges:
 
 - **Inconsistent convergence** — the network usually learns to track and hit the ball, but training stability varies noticeably between runs.
-- **Duplicate synapse-creation block** in `brain.py` (`_create_synapses`) — a docstring-disabled fully-recurrent experiment is kept above the active feedforward+bounded-recurrence version, intentionally, as a live experiment note. Don't be alarmed if you see it; it's not dead code (yet).
 - No automated tests, no CI.
 - No hyperparameter search — most constants are still hand-tuned.
 
 Planned / considered next steps:
 - [ ] Stabilize convergence, investigate run-to-run variance
-- [ ] Resolve or formally document the recurrent-synapse experiment
 - [ ] Add basic sanity-check tests (network builds, one episode runs without crashing)
 - [ ] Hyperparameter sweep for reward shaping / eligibility trace decay
 
