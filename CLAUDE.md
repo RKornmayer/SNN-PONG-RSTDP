@@ -32,5 +32,5 @@ Key mechanisms:
 
 - The entire codebase (comments, print statements, plot titles/labels) is English for publication — no German text should be reintroduced. Comments use a unified style (`# --- Section ---` headers, sentence-case inline notes).
 - `main.py` currently reconstructs the recurrent-synapse block twice in `brain.py` (`_create_synapses`) — one version is a docstring-disabled experiment (fully recurrent layers) kept for reference above the active one (feedforward + optional bounded recurrence). Don't delete the disabled block without asking; it's a live experiment note, not dead code.
-- No test suite, no requirements.txt/pyproject — dependencies are Brian2, numpy, pygame, h5py, matplotlib, installed ad hoc.
+- No test suite, no pyproject.toml. Dependencies (Brian2, numpy, pygame-ce, h5py, matplotlib) are pinned in `requirements.txt`, install with `pip install -r requirements.txt`.
 - Not currently a git repo.
